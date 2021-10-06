@@ -4,10 +4,11 @@ namespace tc_4
 {
     class Program
     {
-        static void Main(string[] args)
+        /// Just run the director and do nothing more.
+        static void Main()
         {
-            Console.WriteLine("Hello World!");
-            Console.WriteLine("i added this code (test1)");
+            Director theDirector = new Director();
+            theDirector.StartGame();
         }
     }
 }
