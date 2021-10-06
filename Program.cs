@@ -7,6 +7,7 @@ namespace tc_4
         static void Main(string[] args)
         {
             Console.WriteLine("Hello World!");
+            Console.WriteLine("i added this code (test1)");
         }
     }
 }
