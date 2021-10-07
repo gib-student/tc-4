@@ -19,18 +19,12 @@ namespace tc_4
                 dealer.AskHighLo();
                 dealer.PullSecondCard();
                 dealer.ShowScore();
-                if (dealer.PlayerIsCorrect())
+                if (!dealer.KeepPlaying())
                 {
-                    if(!dealer.AskKeepPlaying())
-                    {
-                        done = true;
-                    }
-                }
-                else
-                {
-                    done = true;
+                    done = false;
                 }
             }
+            dealer.DisplayGameEndMessage();
 
         }
     }
