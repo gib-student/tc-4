@@ -38,9 +38,18 @@ namespace tc_4
             throw new NotImplementedException();
         }
 
-        /// Ask the player if they desire to contine playing and return
-        /// true/false: true for yes, false for no
-        public bool AskKeepPlaying()
+        /// Decide if the user should keep playing or not.
+        /// End conditions: their score reaches 0, or they say "stop"
+        /// Continue conditions: score is > 0, and they say "continue"
+        public bool KeepPlaying()
+        {
+            throw new NotImplementedException();
+        }
+
+        /// Display a message to the player depending on the conditions of 
+        /// how the game ended. Ex. they ended with a positive score, they
+        /// ended with a score of 0
+        public void DisplayGameEndMessage()
         {
             throw new NotImplementedException();
         }
