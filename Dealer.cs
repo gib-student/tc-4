@@ -1,11 +1,16 @@
 using System;
+using System.Diagnostics;
 
 namespace tc_4
 {
     class Dealer
     {   
+        const int COMMAND_ASK_HIGH_LO = 1;
+        const int COMMAND_KEEP_PLAYING = 2;
+        
         // The score variable only exists in this class
         static int score = 0;
+        static string guess;
 
         /// Pull a card between 1 and 13
         public void PullFirstCard()
@@ -13,10 +18,18 @@ namespace tc_4
             throw new NotImplementedException();
         }
 
-        /// Ask the player if they guess the card is either higher or lower
+        /// Clear the previous guess then ask the player if they guess the card
+        /// is either higher or lower than the first pull
         public void AskHighLo()
         {
-            throw new NotImplementedException();
+            Console.Write("Higher or lower? [h/l] ");
+            string guess = Console.ReadLine().ToLower(); // in case they enter
+                                                         // an uppercase
+            if (!ValidateInput(COMMAND_ASK_HIGH_LO, guess))
+            {
+                DisplayInvalidInputMessage(COMMAND_ASK_HIGH_LO);
+                AskHighLo();
+            }
         }
         
         /// Pull a second card bewtween 1 and 13
@@ -52,6 +65,42 @@ namespace tc_4
         public void DisplayGameEndMessage()
         {
             throw new NotImplementedException();
+        }
+
+        /// Ensure input from the player is valid and usable. 
+        /// Instances of input: When the player gives a guess, and when they
+        /// answer whether they want to keep playing.
+        static bool ValidateInput(int command, string input)
+        {   
+            Debug.Assert(command == COMMAND_ASK_HIGH_LO ||
+                command == COMMAND_KEEP_PLAYING);
+            
+            switch (command) 
+            {
+                case COMMAND_ASK_HIGH_LO:
+                    return (input == "h" || input == "l");
+                case COMMAND_KEEP_PLAYING:
+                    return (input == "y" || input == "n");
+            }
+            // Just in case
+            return false;
+        }
+
+        /// Tell player the input they gave is invalid
+        static void DisplayInvalidInputMessage(int command)
+        {
+            Debug.Assert(command == COMMAND_ASK_HIGH_LO ||
+                command == COMMAND_KEEP_PLAYING);
+            
+            switch (command)
+            {
+                case COMMAND_ASK_HIGH_LO:
+                    Console.WriteLine("Please enter \"h\" or \"l\".");
+                    break;
+                case COMMAND_KEEP_PLAYING:
+                    Console.WriteLine("Please enter \"y\" or \"n\".");
+                    break;
+            }
         }
     }
 }
