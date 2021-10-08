@@ -12,10 +12,14 @@ namespace tc_4
         static int score = 0;
         static string guess;
 
+        public int _cardNumber = 0;
+
         /// Pull a card between 1 and 13
         public void PullFirstCard()
         {
-            throw new NotImplementedException();
+            Random randomCard = new Random();
+            _cardNumber = randomCard.Next(1, 14);
+            Console.WriteLine($"The card is : {_cardNumber}");
         }
 
         /// Clear the previous guess then ask the player if they guess the card
@@ -36,7 +40,13 @@ namespace tc_4
         /// Pull a second card bewtween 1 and 13
         public void PullSecondCard()
         {
-            throw new NotImplementedException();
+            Random randomCard = new Random();
+            int nextCard = randomCard.Next(1, 14);
+            while (nextCard == _cardNumber)
+            {
+                nextCard = randomCard.Next(1,14);
+            }
+            Console.WriteLine($"Next card was: {nextCard}");
         }
 
         /// Show the player's current score
