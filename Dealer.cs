@@ -15,18 +15,19 @@ namespace tc_4
         public int _cardNumber = 0;
 
         /// Pull a card between 1 and 13
-        public void PullFirstCard()
+        public int PullFirstCard()
         {
             Random randomCard = new Random();
             _cardNumber = randomCard.Next(1, 14);
             Console.WriteLine($"The card is : {_cardNumber}");
+            return _cardNumber;
         }
 
         /// Clear the previous guess then ask the player if they guess the card
         /// is either higher or lower than the first pull
-        public void AskHighLo()
+        public string AskHighLo()
         {
-            guess.Remove(0);
+            // guess.Remove(0);
             Console.Write("Higher or lower? [h/l] ");
             guess = Console.ReadLine().ToLower(); // in case they enter
                                                          // an uppercase
@@ -35,10 +36,11 @@ namespace tc_4
                 DisplayInvalidInputMessage(COMMAND_ASK_HIGH_LO);
                 AskHighLo();
             }
+            return guess;
         }
 
         /// Pull a second card bewtween 1 and 13
-        public void PullSecondCard()
+        public int PullSecondCard()
         {
             Random randomCard = new Random();
             int nextCard = randomCard.Next(1, 14);
@@ -47,19 +49,42 @@ namespace tc_4
                 nextCard = randomCard.Next(1,14);
             }
             Console.WriteLine($"Next card was: {nextCard}");
+            return nextCard;
         }
 
         /// Show the player's current score
-        public void ShowScore()
+        public int ShowScore()
         {
-            throw new NotImplementedException();
+            int score = 300;
+            if(AskHighLo() == "l" && PullSecondCard() > PullFirstCard())
+            {
+                score = score - 75;
+            }
+            else if(AskHighLo() == "h" && PullSecondCard() > PullFirstCard())
+            {
+                score = score + 100;
+            }
+            // not displaying the score, I dont know why...
+            Console.WriteLine($"Your score is: {score}");
+            // throw new NotImplementedException();
+            return score;
         }
 
         /// Compute whether the player guessed correctly or not and
         /// return true/false: true for yes, false for no
         public bool PlayerIsCorrect()
         {
-            throw new NotImplementedException();
+
+            // ---- I am confused with this function so I just code what i undesrtood thou :(---
+            if(AskHighLo() == "l" && PullSecondCard() <= PullFirstCard())
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+            // throw new NotImplementedException();
         }
 
         /// Decide if the user should keep playing or not.
@@ -67,7 +92,22 @@ namespace tc_4
         /// Continue conditions: score is > 0, and they say "continue"
         public bool KeepPlaying()
         {
-            throw new NotImplementedException();
+          
+            if ( ShowScore() <=0 )
+            {
+                Console.Write("cointinue playing? y/n ");
+                string keepGame = Console.ReadLine().ToLower();
+                if (keepGame == "y")
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+
+            // throw new NotImplementedException();
         }
 
         /// Display a message to the player depending on the conditions of
@@ -112,6 +152,21 @@ namespace tc_4
                     Console.WriteLine("Please enter \"y\" or \"n\".");
                     break;
             }
+        }
+
+        public override bool Equals(object obj)
+        {
+            return base.Equals(obj);
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+
+        public override string ToString()
+        {
+            return base.ToString();
         }
     }
 }
