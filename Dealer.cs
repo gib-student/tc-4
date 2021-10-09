@@ -98,7 +98,8 @@ namespace tc_4
                 Console.Write("cointinue playing? y/n ");
                 string keepGame = Console.ReadLine().ToLower();
                 if (keepGame == "y")
-                {
+                {   
+
                     return true;
                 }
                 else
