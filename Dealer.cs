@@ -14,6 +14,24 @@ namespace tc_4
         static int _firstCard = 0;
         static int _secondCard = 0;
 
+        public int _bet = 0;
+
+
+        // Ask the user how much points he would like to bet
+        public void PlaceBet()
+        {   
+            Console.WriteLine("How much would you like to bet?");
+            string betString = Console.ReadLine();
+            _bet = int.Parse(betString);
+            while (_bet > _score)
+            {
+                Console.WriteLine($"The bet needs to be lower than {_score}.");
+                Console.Write("How much would you like to bet? ");
+                betString = Console.ReadLine();
+                _bet = int.Parse(betString);
+            }
+            Console.WriteLine($"Your bet is: {_bet}");
+        }
         /// Pull a card between 1 and 13
         public void PullFirstCard()
         {
@@ -189,12 +207,14 @@ namespace tc_4
                 (_guess == "l" && _firstCard >= _secondCard))
             {
                 _score += 100;
+                _score += _bet;
             }
             // Incorrect Conditions
             else if ((_guess == "h" && _firstCard >= _secondCard) ||
                       (_guess == "l" && _firstCard <= _secondCard))
             {
                 _score -= 75;
+                _score -= _bet;
             }
             else
             {
