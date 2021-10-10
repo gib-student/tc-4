@@ -17,6 +17,7 @@ namespace tc_4
                 // This is the general process of the game
                 dealer.PullFirstCard();
                 dealer.AskHighLo();
+                dealer.PlaceBet();
                 dealer.PullSecondCard();
                 dealer.ShowScore();
                 done = (!dealer.KeepPlaying());

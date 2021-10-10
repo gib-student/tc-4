@@ -9,29 +9,12 @@ namespace tc_4
         const int COMMAND_KEEP_PLAYING = 2;
 
         // These variables only exist in this class
-        static int _score = 300;
+        static int _score = 300; // starting score
         static string _guess;
         static int _firstCard = 0;
         static int _secondCard = 0;
+        static int _bet = 0;
 
-        public int _bet = 0;
-
-
-        // Ask the user how much points he would like to bet
-        public void PlaceBet()
-        {   
-            Console.WriteLine("How much would you like to bet?");
-            string betString = Console.ReadLine();
-            _bet = int.Parse(betString);
-            while (_bet > _score)
-            {
-                Console.WriteLine($"The bet needs to be lower than {_score}.");
-                Console.Write("How much would you like to bet? ");
-                betString = Console.ReadLine();
-                _bet = int.Parse(betString);
-            }
-            Console.WriteLine($"Your bet is: {_bet}");
-        }
         /// Pull a card between 1 and 13
         public void PullFirstCard()
         {
@@ -54,6 +37,23 @@ namespace tc_4
             }
         }
 
+        /// Ask player how much they would like to bet and update member
+        /// variable _bet.
+        public void PlaceBet()
+        {   
+            Console.Write($"How much would you like to bet? (Current points: {_score}) ");
+            string betString = Console.ReadLine();
+            _bet = int.Parse(betString);
+            while (_bet > _score)
+            {
+                Console.WriteLine($"The bet needs to be lower than {_score}.");
+                Console.Write("How much would you like to bet? ");
+                betString = Console.ReadLine();
+                _bet = int.Parse(betString);
+            }
+            Console.WriteLine($"Your bet is: {_bet}");
+        }
+
         /// Pull a second card bewtween 1 and 13
         public void PullSecondCard()
         {
@@ -63,14 +63,23 @@ namespace tc_4
             {
                 _secondCard = randomCard.Next(1,14);
             }
-            Console.WriteLine($"Next card was: {_secondCard}");
+            Console.WriteLine($"Next card was: {_secondCard}" );
         }
 
         /// Show the player's current score
         public void ShowScore()
         {
-            ScoreKeeper();
-            Console.WriteLine($"Your score is: {_score}");
+            int scoreChange = ScoreKeeper();
+
+            Console.Write($"Your score is: {_score} ");
+            if (scoreChange >= 0)
+            {
+                Console.WriteLine($"(+{scoreChange} points)");
+            }
+            else
+            {
+                Console.WriteLine($"-{scoreChange} points)");
+            }
         }
 
         /// Compute whether the player guessed correctly or not and
@@ -140,15 +149,15 @@ namespace tc_4
             }
             else
             {
-                Console.WriteLine("\t\t▓██   ██▓ ▒█████   █    ██       ██▓    ▒█████    ██████ ▄▄▄█████▓");
-                Console.WriteLine("\t\t ▒██  ██▒▒██▒  ██▒ ██  ▓██▒     ▓██▒   ▒██▒  ██▒▒██    ▒ ▓  ██▒ ▓▒");
-                Console.WriteLine("\t\t  ▒██ ██░▒██░  ██▒▓██  ▒██░     ▒██░   ▒██░  ██▒░ ▓██▄   ▒ ▓██░ ▒░");
-                Console.WriteLine("\t\t  ░ ▐██▓░▒██   ██░▓▓█  ░██░     ▒██░   ▒██   ██░  ▒   ██▒░ ▓██▓ ░ ");
-                Console.WriteLine("\t\t  ░ ██▒▓░░ ████▓▒░▒▒█████▓     ▒░██████░ ████▓▒░▒██████▒▒  ▒██▒ ░ ");
-                Console.WriteLine("\t\t   ██▒▒▒ ░ ▒░▒░▒░ ░▒▓▒ ▒ ▒     ░░ ▒░▓  ░ ▒░▒░▒░ ▒ ▒▓▒ ▒ ░  ▒ ░░   ");
-                Console.WriteLine("\t\t ▓██ ░▒░   ░ ▒ ▒░ ░░▒░ ░ ░     ░░ ░ ▒    ░ ▒ ▒░ ░ ░▒  ░ ░    ░    ");
-                Console.WriteLine("\t\t ▒ ▒ ░░  ░ ░ ░ ▒   ░░░ ░ ░        ░ ░  ░ ░ ░ ▒  ░  ░  ░    ░      ");
-                Console.WriteLine("\t\t ░ ░         ░ ░     ░         ░    ░      ░ ░        ░           ");
+                Console.WriteLine("\t\t\t\t\t▓██   ██▓ ▒█████   █    ██       ██▓    ▒█████    ██████ ▄▄▄█████▓");
+                Console.WriteLine("\t\t\t\t\t ▒██  ██▒▒██▒  ██▒ ██  ▓██▒     ▓██▒   ▒██▒  ██▒▒██    ▒ ▓  ██▒ ▓▒");
+                Console.WriteLine("\t\t\t\t\t  ▒██ ██░▒██░  ██▒▓██  ▒██░     ▒██░   ▒██░  ██▒░ ▓██▄   ▒ ▓██░ ▒░");
+                Console.WriteLine("\t\t\t\t\t  ░ ▐██▓░▒██   ██░▓▓█  ░██░     ▒██░   ▒██   ██░  ▒   ██▒░ ▓██▓ ░ ");
+                Console.WriteLine("\t\t\t\t\t  ░ ██▒▓░░ ████▓▒░▒▒█████▓     ▒░██████░ ████▓▒░▒██████▒▒  ▒██▒ ░ ");
+                Console.WriteLine("\t\t\t\t\t   ██▒▒▒ ░ ▒░▒░▒░ ░▒▓▒ ▒ ▒     ░░ ▒░▓  ░ ▒░▒░▒░ ▒ ▒▓▒ ▒ ░  ▒ ░░   ");
+                Console.WriteLine("\t\t\t\t\t ▓██ ░▒░   ░ ▒ ▒░ ░░▒░ ░ ░     ░░ ░ ▒    ░ ▒ ▒░ ░ ░▒  ░ ░    ░    ");
+                Console.WriteLine("\t\t\t\t\t ▒ ▒ ░░  ░ ░ ░ ▒   ░░░ ░ ░        ░ ░  ░ ░ ░ ▒  ░  ░  ░    ░      ");
+                Console.WriteLine("\t\t\t\t\t ░ ░         ░ ░     ░         ░    ░      ░ ░        ░           ");
                 Console.WriteLine("\n\n\n");
 
             }
@@ -200,7 +209,7 @@ namespace tc_4
 
         /// Change the score according to the player's input and according to
         /// the rules.
-        static void ScoreKeeper()
+        static int ScoreKeeper()
         {
             // Correct conditions
             if ((_guess == "h" && _firstCard <= _secondCard) ||
@@ -208,6 +217,8 @@ namespace tc_4
             {
                 _score += 100;
                 _score += _bet;
+                
+                return 100 + _bet;
             }
             // Incorrect Conditions
             else if ((_guess == "h" && _firstCard >= _secondCard) ||
@@ -215,10 +226,13 @@ namespace tc_4
             {
                 _score -= 75;
                 _score -= _bet;
+                
+                return 75 + _bet;
             }
             else
             {
-                throw new NotImplementedException();
+                Console.WriteLine("\t\tScoreKeeper() error");
+                return 0;
             }
         }
 
