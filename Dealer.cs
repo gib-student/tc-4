@@ -12,7 +12,7 @@ namespace tc_4
         static int _score = 300;
         static string _guess;
         static int _firstCard = 0;
-        static int secondCard = 0;
+        static int _secondCard = 0;
 
         /// Pull a card between 1 and 13
         public void PullFirstCard()
@@ -22,12 +22,12 @@ namespace tc_4
             Console.WriteLine($"The card is : {_firstCard}");
         }
 
-        /// Clear the previous guess then ask the player if they guess the card
-        /// is either higher or lower than the first pull
+        /// Ask the player if they guess the second card
+        /// is either higher or lower than the first card
         public void AskHighLo()
         {
             Console.Write("Higher or lower? [h/l] ");
-            _guess = Console.ReadLine().ToLower();   // in case they enter
+            _guess = Console.ReadLine().ToLower();  // in case they enter
                                                     // an uppercase
             if (!ValidateInput(COMMAND_ASK_HIGH_LO, _guess))
             {
@@ -40,36 +40,31 @@ namespace tc_4
         public void PullSecondCard()
         {
             Random randomCard = new Random();
-            secondCard = randomCard.Next(1, 14);
-            while (secondCard == _firstCard)
+            _secondCard = randomCard.Next(1, 14);
+            while (_secondCard == _firstCard)
             {
-                secondCard = randomCard.Next(1,14);
+                _secondCard = randomCard.Next(1,14);
             }
-            Console.WriteLine($"Next card was: {secondCard}");
+            Console.WriteLine($"Next card was: {_secondCard}");
         }
 
         /// Show the player's current score
         public void ShowScore()
         {
-            if (_guess == "l" && secondCard > _firstCard)
-            {
-                _score -= 75;
-            }
-            else if (_guess == "h" && secondCard > _firstCard)
-            {
-                _score += 100;
-            }
-            // not displaying the score, I dont know why...
+            ScoreKeeper();
             Console.WriteLine($"Your score is: {_score}");
         }
 
         /// Compute whether the player guessed correctly or not and
-        /// return true/false: true for yes, false for no
+        /// return true/false: true for yes, false for no.
+        /// Returns a bool
         public bool PlayerIsCorrect()
         {
-
-            // ---- I am confused with this function so I just code what i undesrtood thou :(---
-            if(AskHighLo() == "l" && PullSecondCard() <= PullFirstCard())
+            if (_guess == "l" && _firstCard <= _secondCard)
+            {
+                return true;
+            }
+            else if (_guess == "h" && _firstCard >= _secondCard)
             {
                 return true;
             }
@@ -80,24 +75,32 @@ namespace tc_4
         }
 
         /// Decide if the user should keep playing or not.
-        /// End conditions: their score reaches 0, or they say "stop"
-        /// Continue conditions: score is > 0, and they say "continue"
+        /// End conditions: their score reaches 0, or they say "stop".
+        /// Continue conditions: score is > 0, and they say "continue".
+        /// Returns a bool.
         public bool KeepPlaying()
         {
-
-            if ( ShowScore() <=0 )
+            if (_score > 0)
             {
-                Console.Write("cointinue playing? y/n ");
+                Console.Write("Continue playing? [y/n] ");
                 string keepGame = Console.ReadLine().ToLower();
+                while (!ValidateInput(COMMAND_KEEP_PLAYING, keepGame))
+                {
+                    DisplayInvalidInputMessage(COMMAND_KEEP_PLAYING);
+                    keepGame = Console.ReadLine().ToLower();
+                }
                 if (keepGame == "y")
                 {
-
                     return true;
                 }
                 else
                 {
                     return false;
                 }
+            }
+            else
+            {
+                return false;
             }
         }
 
@@ -106,7 +109,39 @@ namespace tc_4
         /// ended with a score of 0
         public void DisplayGameEndMessage()
         {
-            throw new NotImplementedException();
+            if (_score > 0)
+            {                                                                           
+                Console.WriteLine("\t\t\t\t\t▀███▀   ▀██▀                                                            ██ ");
+                Console.WriteLine("\t\t\t\t\t  ███   ▄█                                                              ██ ");
+                Console.WriteLine("\t\t\t\t\t   ███ ▄█    ▄██▀██▄▀███  ▀███     ▀██▀    ▄█    ▀██▀ ▄██▀██▄▀████████▄ ██ ");
+                Console.WriteLine("\t\t\t\t\t    ████    ██▀   ▀██ ██    ██       ██   ▄███   ▄█  ██▀   ▀██ ██    ██ ██ ");
+                Console.WriteLine("\t\t\t\t\t     ██     ██     ██ ██    ██        ██ ▄█  ██ ▄█   ██     ██ ██    ██ ▀▀ ");
+                Console.WriteLine("\t\t\t\t\t     ██     ██▄   ▄██ ██    ██         ███    ███    ██▄   ▄██ ██    ██ ▄▄ ");
+                Console.WriteLine("\t\t\t\t\t   ▄████▄    ▀█████▀  ▀████▀███▄        █      █      ▀█████▀▄████  ████▄█ ");
+                Console.WriteLine("\n\n\n");
+            }
+            else
+            {
+                Console.WriteLine("\t\t▓██   ██▓ ▒█████   █    ██       ██▓    ▒█████    ██████ ▄▄▄█████▓");
+                Console.WriteLine("\t\t ▒██  ██▒▒██▒  ██▒ ██  ▓██▒     ▓██▒   ▒██▒  ██▒▒██    ▒ ▓  ██▒ ▓▒");
+                Console.WriteLine("\t\t  ▒██ ██░▒██░  ██▒▓██  ▒██░     ▒██░   ▒██░  ██▒░ ▓██▄   ▒ ▓██░ ▒░");
+                Console.WriteLine("\t\t  ░ ▐██▓░▒██   ██░▓▓█  ░██░     ▒██░   ▒██   ██░  ▒   ██▒░ ▓██▓ ░ ");
+                Console.WriteLine("\t\t  ░ ██▒▓░░ ████▓▒░▒▒█████▓     ▒░██████░ ████▓▒░▒██████▒▒  ▒██▒ ░ ");
+                Console.WriteLine("\t\t   ██▒▒▒ ░ ▒░▒░▒░ ░▒▓▒ ▒ ▒     ░░ ▒░▓  ░ ▒░▒░▒░ ▒ ▒▓▒ ▒ ░  ▒ ░░   ");
+                Console.WriteLine("\t\t ▓██ ░▒░   ░ ▒ ▒░ ░░▒░ ░ ░     ░░ ░ ▒    ░ ▒ ▒░ ░ ░▒  ░ ░    ░    ");
+                Console.WriteLine("\t\t ▒ ▒ ░░  ░ ░ ░ ▒   ░░░ ░ ░        ░ ░  ░ ░ ░ ▒  ░  ░  ░    ░      ");
+                Console.WriteLine("\t\t ░ ░         ░ ░     ░         ░    ░      ░ ░        ░           ");
+                Console.WriteLine("\n\n\n");
+
+            }
+            Console.WriteLine("\t\t ▄▄▄▄▄▄▄ ▄▄   ▄▄ ▄▄▄▄▄▄ ▄▄    ▄ ▄▄▄   ▄ ▄▄▄▄▄▄▄    ▄▄▄▄▄▄▄ ▄▄▄▄▄▄▄ ▄▄▄▄▄▄      ▄▄▄▄▄▄▄ ▄▄▄     ▄▄▄▄▄▄ ▄▄   ▄▄ ▄▄▄ ▄▄    ▄ ▄▄▄▄▄▄▄ ");
+            Console.WriteLine("\t\t█       █  █ █  █      █  █  █ █   █ █ █       █  █       █       █   ▄  █    █       █   █   █      █  █ █  █   █  █  █ █       █");
+            Console.WriteLine("\t\t█▄     ▄█  █▄█  █  ▄   █   █▄█ █   █▄█ █  ▄▄▄▄▄█  █    ▄▄▄█   ▄   █  █ █ █    █    ▄  █   █   █  ▄   █  █▄█  █   █   █▄█ █   ▄▄▄▄█");
+            Console.WriteLine("\t\t  █   █ █       █ █▄█  █       █      ▄█ █▄▄▄▄▄   █   █▄▄▄█  █ █  █   █▄▄█▄   █   █▄█ █   █   █ █▄█  █       █   █       █  █  ▄▄ ");
+            Console.WriteLine("\t\t  █   █ █   ▄   █      █  ▄    █     █▄█▄▄▄▄▄  █  █    ▄▄▄█  █▄█  █    ▄▄  █  █    ▄▄▄█   █▄▄▄█      █▄     ▄█   █  ▄    █  █ █  █");
+            Console.WriteLine("\t\t  █   █ █  █ █  █  ▄   █ █ █   █    ▄  █▄▄▄▄▄█ █  █   █   █       █   █  █ █  █   █   █       █  ▄   █ █   █ █   █ █ █   █  █▄▄█ █");
+            Console.WriteLine("\t\t  █▄▄▄█ █▄▄█ █▄▄█▄█ █▄▄█▄█  █▄▄█▄▄▄█ █▄█▄▄▄▄▄▄▄█  █▄▄▄█   █▄▄▄▄▄▄▄█▄▄▄█  █▄█  █▄▄▄█   █▄▄▄▄▄▄▄█▄█ █▄▄█ █▄▄▄█ █▄▄▄█▄█  █▄▄█▄▄▄▄▄▄▄█");
+
         }
 
         /// Ensure input from the player is valid and usable.
@@ -145,19 +180,43 @@ namespace tc_4
             }
         }
 
-        public override bool Equals(object obj)
+        /// Change the score according to the player's input and according to
+        /// the rules.
+        static void ScoreKeeper()
         {
-            return base.Equals(obj);
+            // Correct conditions
+            if ((_guess == "h" && _firstCard <= _secondCard) ||
+                (_guess == "l" && _firstCard >= _secondCard))
+            {
+                _score += 100;
+            }
+            // Incorrect Conditions
+            else if ((_guess == "h" && _firstCard >= _secondCard) ||
+                      (_guess == "l" && _firstCard <= _secondCard))
+            {
+                _score -= 75;
+            }
+            else
+            {
+                throw new NotImplementedException();
+            }
         }
 
-        public override int GetHashCode()
-        {
-            return base.GetHashCode();
-        }
+        /// I'm not sure what this code is for. There are no instances
+        /// of these methods except for what is right here.
+        // public override bool Equals(object obj)
+        // {
+        //     return base.Equals(obj);
+        // }
 
-        public override string ToString()
-        {
-            return base.ToString();
-        }
+        // public override int GetHashCode()
+        // {
+        //     return base.GetHashCode();
+        // }
+
+        // public override string ToString()
+        // {
+        //     return base.ToString();
+        // }
     }
 }
