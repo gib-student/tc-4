@@ -14,6 +14,24 @@ namespace tc_4
         static int _firstCard = 0;
         static int secondCard = 0;
 
+        public int _bet = 0;
+
+
+        // Ask the user how much points he would like to bet
+        public void PlaceBet()
+        {   
+            Console.WriteLine("How much would you like to bet?");
+            string bet = Console.ReadLine();
+            _bet = int.Parse(bet);
+            while (_bet > _score)
+            {
+                Console.WriteLine($"Sorry {_bet} is not a valid bet. {_bet} needs to be lower than {_score}. Please try again");
+                Console.WriteLine("How much would you like to bet?");
+                bet = Console.ReadLine();
+                _bet = int.Parse(bet);
+            }
+            Console.WriteLine($"Your bet is: {_bet}");
+        }
         /// Pull a card between 1 and 13
         public void PullFirstCard()
         {
@@ -53,11 +71,13 @@ namespace tc_4
         {
             if (_guess == "l" && secondCard > _firstCard)
             {
-                _score -= 75;
+                _score =  _score - _bet;
+                //_score -= 75;
             }
             else if (_guess == "h" && secondCard > _firstCard)
             {
-                _score += 100;
+                _score = _bet +_score;
+                //_score += 100;
             }
             // not displaying the score, I dont know why...
             Console.WriteLine($"Your score is: {_score}");
