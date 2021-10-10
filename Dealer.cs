@@ -8,66 +8,59 @@ namespace tc_4
         const int COMMAND_ASK_HIGH_LO = 1;
         const int COMMAND_KEEP_PLAYING = 2;
 
-        // The score variable only exists in this class
-        static int score = 0;
-        static string guess;
-
-        public int _cardNumber = 0;
+        // These variables only exist in this class
+        static int _score = 300;
+        static string _guess;
+        static int _firstCard = 0;
+        static int secondCard = 0;
 
         /// Pull a card between 1 and 13
-        public int PullFirstCard()
+        public void PullFirstCard()
         {
             Random randomCard = new Random();
-            _cardNumber = randomCard.Next(1, 14);
-            Console.WriteLine($"The card is : {_cardNumber}");
-            return _cardNumber;
+            _firstCard = randomCard.Next(1, 14);
+            Console.WriteLine($"The card is : {_firstCard}");
         }
 
         /// Clear the previous guess then ask the player if they guess the card
         /// is either higher or lower than the first pull
-        public string AskHighLo()
+        public void AskHighLo()
         {
-            // guess.Remove(0);
             Console.Write("Higher or lower? [h/l] ");
-            guess = Console.ReadLine().ToLower(); // in case they enter
-                                                         // an uppercase
-            if (!ValidateInput(COMMAND_ASK_HIGH_LO, guess))
+            _guess = Console.ReadLine().ToLower();   // in case they enter
+                                                    // an uppercase
+            if (!ValidateInput(COMMAND_ASK_HIGH_LO, _guess))
             {
                 DisplayInvalidInputMessage(COMMAND_ASK_HIGH_LO);
                 AskHighLo();
             }
-            return guess;
         }
 
         /// Pull a second card bewtween 1 and 13
-        public int PullSecondCard()
+        public void PullSecondCard()
         {
             Random randomCard = new Random();
-            int nextCard = randomCard.Next(1, 14);
-            while (nextCard == _cardNumber)
+            secondCard = randomCard.Next(1, 14);
+            while (secondCard == _firstCard)
             {
-                nextCard = randomCard.Next(1,14);
+                secondCard = randomCard.Next(1,14);
             }
-            Console.WriteLine($"Next card was: {nextCard}");
-            return nextCard;
+            Console.WriteLine($"Next card was: {secondCard}");
         }
 
         /// Show the player's current score
-        public int ShowScore()
+        public void ShowScore()
         {
-            int score = 300;
-            if(AskHighLo() == "l" && PullSecondCard() > PullFirstCard())
+            if (_guess == "l" && secondCard > _firstCard)
             {
-                score = score - 75;
+                _score -= 75;
             }
-            else if(AskHighLo() == "h" && PullSecondCard() > PullFirstCard())
+            else if (_guess == "h" && secondCard > _firstCard)
             {
-                score = score + 100;
+                _score += 100;
             }
             // not displaying the score, I dont know why...
-            Console.WriteLine($"Your score is: {score}");
-            // throw new NotImplementedException();
-            return score;
+            Console.WriteLine($"Your score is: {_score}");
         }
 
         /// Compute whether the player guessed correctly or not and
@@ -84,7 +77,6 @@ namespace tc_4
             {
                 return false;
             }
-            // throw new NotImplementedException();
         }
 
         /// Decide if the user should keep playing or not.
@@ -92,13 +84,13 @@ namespace tc_4
         /// Continue conditions: score is > 0, and they say "continue"
         public bool KeepPlaying()
         {
-          
+
             if ( ShowScore() <=0 )
             {
                 Console.Write("cointinue playing? y/n ");
                 string keepGame = Console.ReadLine().ToLower();
                 if (keepGame == "y")
-                {   
+                {
 
                     return true;
                 }
@@ -107,8 +99,6 @@ namespace tc_4
                     return false;
                 }
             }
-
-            // throw new NotImplementedException();
         }
 
         /// Display a message to the player depending on the conditions of
