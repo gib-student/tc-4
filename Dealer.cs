@@ -21,14 +21,14 @@ namespace tc_4
         public void PlaceBet()
         {   
             Console.WriteLine("How much would you like to bet?");
-            string bet = Console.ReadLine();
-            _bet = int.Parse(bet);
+            string betString = Console.ReadLine();
+            _bet = int.Parse(betString);
             while (_bet > _score)
             {
-                Console.WriteLine($"Sorry {_bet} is not a valid bet. {_bet} needs to be lower than {_score}. Please try again");
-                Console.WriteLine("How much would you like to bet?");
-                bet = Console.ReadLine();
-                _bet = int.Parse(bet);
+                Console.WriteLine($"The bet needs to be lower than {_score}.");
+                Console.Write("How much would you like to bet? ");
+                betString = Console.ReadLine();
+                _bet = int.Parse(betString);
             }
             Console.WriteLine($"Your bet is: {_bet}");
         }
