@@ -74,11 +74,11 @@ namespace tc_4
             Console.Write($"Your score is: {_score} ");
             if (scoreChange >= 0)
             {
-                Console.WriteLine($"(+{scoreChange} points)");
+                Console.WriteLine($"(+ {scoreChange} points)");
             }
             else
             {
-                Console.WriteLine($"-{scoreChange} points)");
+                Console.WriteLine($"- {scoreChange} points)");
             }
         }
 
